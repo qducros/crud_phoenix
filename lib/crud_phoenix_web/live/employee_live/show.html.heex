@@ -1,0 +1,29 @@
+<.header>
+  Employee <%= @employee.id %>
+  <:subtitle>This is a employee record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/employees/#{@employee}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit employee</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Fullname"><%= @employee.fullname %></:item>
+  <:item title="Email"><%= @employee.email %></:item>
+  <:item title="Title"><%= @employee.title %></:item>
+  <:item title="Age"><%= @employee.age %></:item>
+</.list>
+
+<.back navigate={~p"/employees"}>Back to employees</.back>
+
+<.modal :if={@live_action == :edit} id="employee-modal" show on_cancel={JS.patch(~p"/employees/#{@employee}")}>
+  <.live_component
+    module={CrudPhoenixWeb.EmployeeLive.FormComponent}
+    id={@employee.id}
+    title={@page_title}
+    action={@live_action}
+    employee={@employee}
+    patch={~p"/employees/#{@employee}"}
+  />
+</.modal>

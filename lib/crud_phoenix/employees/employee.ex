@@ -7,7 +7,7 @@ defmodule CrudPhoenix.Employees.Employee do
     field :fullname, :string
     field :email, :string
     field :age, :integer
-    belongs_to :user, CrudPhoenix.Companies.Company
+    belongs_to(:company, CrudPhoenix.Companies.Company)
 
     timestamps(type: :utc_datetime)
   end
@@ -17,6 +17,8 @@ defmodule CrudPhoenix.Employees.Employee do
     employee
     |> cast(attrs, [:fullname, :email, :title, :age, :company_id])
     |> validate_required([:fullname, :email, :title, :age, :company_id])
+    |> validate_inclusion(:company_id, CrudPhoenix.Companies.list_company_ids())
+    |> validate_inclusion(:age, 16..100)
     |> unique_constraint(:email)
   end
 end

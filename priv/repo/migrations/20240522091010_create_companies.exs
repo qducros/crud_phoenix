@@ -3,12 +3,12 @@ defmodule CrudPhoenix.Repo.Migrations.CreateCompanies do
 
   def change do
     create table(:companies) do
-      add :name, :string
-      add :logo, :string
-      add :business, :string
-      add :description, :text
-      add :creation, :date
-      add :headquarters, :string
+      add :name, :string, null: false
+      add :logo, :string, null: false
+      add :business, :string, null: false
+      add :description, :text, null: false
+      add :creation, :date, null: false
+      add :headquarters, :string, null: false
 
       timestamps(type: :utc_datetime)
     end

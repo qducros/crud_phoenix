@@ -19,10 +19,11 @@ defmodule CrudPhoenixWeb.EmployeeLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:fullname]} type="text" label="Fullname" />
+        <.input field={@form[:fullname]} type="text" label="Full Name" />
         <.input field={@form[:email]} type="text" label="Email" />
         <.input field={@form[:title]} type="text" label="Title" />
         <.input field={@form[:age]} type="number" label="Age" />
+        <.input field={@form[:company_id]} type="select" label="Company" options={@options} prompt="Select the company" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Employee</.button>
         </:actions>
@@ -86,7 +87,10 @@ defmodule CrudPhoenixWeb.EmployeeLive.FormComponent do
   end
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do
-    assign(socket, :form, to_form(changeset))
+    options = CrudPhoenix.Companies.list_company_names_ids()
+    socket
+      |> assign(:form, to_form(changeset))
+      |> assign(:options, options)
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})

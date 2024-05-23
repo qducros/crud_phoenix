@@ -18,7 +18,7 @@ defmodule CrudPhoenix.Employees do
 
   """
   def list_employees do
-    Repo.all(Employee)
+    Employee |> Repo.all() |> Repo.preload(:company)
   end
 
   @doc """
@@ -35,7 +35,9 @@ defmodule CrudPhoenix.Employees do
       ** (Ecto.NoResultsError)
 
   """
-  def get_employee!(id), do: Repo.get!(Employee, id)
+  def get_employee!(id) do
+    Employee |> Repo.get!(id) |> Repo.preload(:company)
+  end
 
   @doc """
   Creates a employee.

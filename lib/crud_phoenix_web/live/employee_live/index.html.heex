@@ -12,10 +12,11 @@
   rows={@streams.employees}
   row_click={fn {_id, employee} -> JS.navigate(~p"/employees/#{employee}") end}
 >
-  <:col :let={{_id, employee}} label="Fullname"><%= employee.fullname %></:col>
+  <:col :let={{_id, employee}} label="Full Name"><%= employee.fullname %></:col>
   <:col :let={{_id, employee}} label="Email"><%= employee.email %></:col>
   <:col :let={{_id, employee}} label="Title"><%= employee.title %></:col>
   <:col :let={{_id, employee}} label="Age"><%= employee.age %></:col>
+  <:col :let={{_id, employee}} label="Company"><%= employee.company.name %></:col>
   <:action :let={{_id, employee}}>
     <div class="sr-only">
       <.link navigate={~p"/employees/#{employee}"}>Show</.link>

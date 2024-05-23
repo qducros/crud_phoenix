@@ -21,6 +21,18 @@ defmodule CrudPhoenix.Companies do
     Repo.all(Company)
   end
 
+  def list_company_names_ids do
+    Company
+    |> Repo.all()
+    |> Enum.map(&{&1.name, &1.id})
+  end
+
+  def list_company_ids do
+    Company
+    |> Repo.all()
+    |> Enum.map(& &1.id)
+  end
+
   @doc """
   Gets a single company.
 

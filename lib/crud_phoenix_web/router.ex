@@ -17,6 +17,17 @@ defmodule CrudPhoenixWeb.Router do
   scope "/", CrudPhoenixWeb do
     pipe_through :browser
 
+    live "/companies", CompanyLive.Index, :index
+    live "/companies/new", CompanyLive.Index, :new
+    live "/companies/:id/edit", CompanyLive.Index, :edit
+    live "/companies/:id", CompanyLive.Show, :show
+    live "/companies/:id/show/edit", CompanyLive.Show, :edit
+
+    live "/employees", EmployeeLive.Index, :index
+    live "/employees/new", EmployeeLive.Index, :new
+    live "/employees/:id/edit", EmployeeLive.Index, :edit
+    live "/employees/:id", EmployeeLive.Show, :show
+    live "/employees/:id/show/edit", EmployeeLive.Show, :edit
     get "/", PageController, :home
   end
 

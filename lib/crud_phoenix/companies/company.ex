@@ -9,7 +9,7 @@ defmodule CrudPhoenix.Companies.Company do
     field :logo, :string
     field :business, :string
     field :headquarters, :string
-    has_many :employees, CrudPhoenix.Employees.Employee
+    has_many(:employees, CrudPhoenix.Employees.Employee)
 
     timestamps(type: :utc_datetime)
   end

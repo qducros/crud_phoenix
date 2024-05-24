@@ -49,6 +49,10 @@ defmodule CrudPhoenix.Companies do
   """
   def get_company!(id), do: Repo.get!(Company, id)
 
+  def get_company_with_employees!(id) do
+    Company |> Repo.get!(id) |> Repo.preload(:employees)
+  end
+
   @doc """
   Creates a company.
 

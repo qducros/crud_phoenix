@@ -1,6 +1,5 @@
 <.header>
-  Company <%= @company.id %>
-  <:subtitle>This is a company record from your database.</:subtitle>
+  <%= @company.name %>
   <:actions>
     <.link patch={~p"/companies/#{@company}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit company</.button>
@@ -11,14 +10,28 @@
   </:actions>
 </.header>
 
+<img src={@company.logo} class="max-w-24 h-auto block my-4" alt="company logo" />
+
 <.list>
-  <:item title="Name"><%= @company.name %></:item>
-  <:item title="Logo"><img src={@company.logo} class="max-w-24 h-auto block" alt="company logo" /></:item>
   <:item title="Business"><%= @company.business %></:item>
   <:item title="Description"><%= @company.description %></:item>
   <:item title="Creation"><%= @company.creation %></:item>
   <:item title="Headquarters"><%= @company.headquarters %></:item>
 </.list>
+<.header class="mt-20">
+  Employees from <%= @company.name %>
+</.header>
+
+<.table
+  id="employees"
+  rows={@company.employees}
+  row_click={fn employee -> JS.navigate(~p"/employees/#{employee}") end}
+>
+  <:col :let={employee} label="Full Name"><%= employee.fullname %></:col>
+  <:col :let={employee} label="Email"><%= employee.email %></:col>
+  <:col :let={employee} label="Title"><%= employee.title %></:col>
+  <:col :let={employee} label="Age"><%= employee.age %></:col>
+</.table>
 
 <.back navigate={~p"/companies"}>Back to companies</.back>
 

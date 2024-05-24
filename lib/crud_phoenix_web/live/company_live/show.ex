@@ -13,7 +13,7 @@ defmodule CrudPhoenixWeb.CompanyLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:company, Companies.get_company!(id))}
+     |> assign(:company, Companies.get_company_with_employees!(id))}
   end
 
   defp page_title(:show), do: "Show Company"

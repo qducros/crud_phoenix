@@ -21,15 +21,9 @@
     <div class="sr-only">
       <.link navigate={~p"/employees/#{employee}"}>Show</.link>
     </div>
-    <.link patch={~p"/employees/#{employee}/edit"}>Edit</.link>
-  </:action>
-  <:action :let={{id, employee}}>
-    <.link
-      phx-click={JS.push("delete", value: %{id: employee.id}) |> hide("##{id}")}
-      data-confirm="Are you sure?"
-    >
-      Delete
-    </.link>
+    <.link patch={~p"/employees/#{employee}/edit"} class="mr-2">Edit</.link>
+        <.link patch={~p"/employees/#{employee}/delete"}>Delete</.link>
+
   </:action>
 </.table>
 
@@ -37,6 +31,17 @@
   <.live_component
     module={CrudPhoenixWeb.EmployeeLive.FormComponent}
     id={@employee.id || :new}
+    title={@page_title}
+    action={@live_action}
+    employee={@employee}
+    patch={~p"/employees"}
+  />
+</.modal>
+
+<.modal :if={@live_action === :delete} id="employee-delete-modal" show on_cancel={JS.patch(~p"/employees")}>
+  <.live_component
+    module={CrudPhoenixWeb.EmployeeLive.FormDeleteComponent}
+    id={@employee.id}
     title={@page_title}
     action={@live_action}
     employee={@employee}

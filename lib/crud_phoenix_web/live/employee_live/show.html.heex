@@ -1,9 +1,12 @@
 <.header>
-  Employee <%= @employee.id %>
-  <:subtitle>This is a employee record from your database.</:subtitle>
+  Employee: <%= @employee.fullname %>
+  <:subtitle>Information about the employee</:subtitle>
   <:actions>
     <.link patch={~p"/employees/#{@employee}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit employee</.button>
+    </.link>
+    <.link patch={~p"/employees/#{@employee}/show/delete"} phx-click={JS.push_focus()}>
+      <.button>Delete employee</.button>
     </.link>
   </:actions>
 </.header>
@@ -13,6 +16,12 @@
   <:item title="Email"><%= @employee.email %></:item>
   <:item title="Title"><%= @employee.title %></:item>
   <:item title="Age"><%= @employee.age %></:item>
+  <:item title="Company">
+    <.link navigate={~p"/companies/#{@employee.company.id}"}
+      class="rounded-lg bg-zinc-200 px-2 py-1 hover:bg-zinc-300/80">
+        <%= @employee.company.name %>
+    </.link>
+  </:item>
 </.list>
 
 <.back navigate={~p"/employees"}>Back to employees</.back>
@@ -25,5 +34,17 @@
     action={@live_action}
     employee={@employee}
     patch={~p"/employees/#{@employee}"}
+  />
+</.modal>
+
+<.modal :if={@live_action === :delete} id="employee-delete-modal" show on_cancel={JS.patch(~p"/employees/#{@employee}")}>
+  <.live_component
+    module={CrudPhoenixWeb.EmployeeLive.FormDeleteComponent}
+    id={@employee.id}
+    title={@page_title}
+    action={@live_action}
+    employee={@employee}
+    patch={~p"/employees/#{@employee}"}
+    navigate={~p"/employees"}
   />
 </.modal>

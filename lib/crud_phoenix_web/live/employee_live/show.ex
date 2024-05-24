@@ -18,4 +18,5 @@ defmodule CrudPhoenixWeb.EmployeeLive.Show do
 
   defp page_title(:show), do: "Show Employee"
   defp page_title(:edit), do: "Edit Employee"
+  defp page_title(:delete), do: "Delete Employee"
 end

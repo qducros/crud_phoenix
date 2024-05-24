@@ -14,6 +14,12 @@ defmodule CrudPhoenixWeb.EmployeeLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
+  defp apply_action(socket, :delete, %{"id" => id}) do
+    socket
+    |> assign(:page_title, "Delete Employee")
+    |> assign(:employee, Employees.get_employee!(id))
+  end
+
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Employee")
@@ -34,14 +40,11 @@ defmodule CrudPhoenixWeb.EmployeeLive.Index do
 
   @impl true
   def handle_info({CrudPhoenixWeb.EmployeeLive.FormComponent, {:saved, employee}}, socket) do
-    {:noreply, stream_insert(socket, :employees, employee)}
+    {:noreply, stream_insert(socket, :employees, Employees.get_employee!(employee.id))}
   end
 
   @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
-    employee = Employees.get_employee!(id)
-    {:ok, _} = Employees.delete_employee(employee)
-
+  def handle_info({CrudPhoenixWeb.EmployeeLive.FormDeleteComponent, {:deleted, employee}}, socket) do
     {:noreply, stream_delete(socket, :employees, employee)}
   end
 end

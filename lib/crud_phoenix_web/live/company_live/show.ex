@@ -18,4 +18,5 @@ defmodule CrudPhoenixWeb.CompanyLive.Show do
 
   defp page_title(:show), do: "Show Company"
   defp page_title(:edit), do: "Edit Company"
+  defp page_title(:delete), do: "Delete Company"
 end

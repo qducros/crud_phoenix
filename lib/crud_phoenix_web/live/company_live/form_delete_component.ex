@@ -31,11 +31,12 @@ defmodule CrudPhoenixWeb.CompanyLive.FormDeleteComponent do
         delete_file!(company.logo)
 
         notify_parent({:deleted, company})
-
-        {:noreply,
-          socket
-          |> put_flash(:info, "Company deleted successfully")
-          |> push_patch(to: socket.assigns.patch)}
+        socket = socket |> put_flash(:info, "Company deleted successfully")
+        if socket.assigns.navigate do
+          {:noreply, socket |> push_navigate(to: socket.assigns.navigate)}
+        else
+          {:noreply, socket |> push_patch(to: socket.assigns.patch)}
+        end
 
       {:error, _changeset} ->
         {:noreply,

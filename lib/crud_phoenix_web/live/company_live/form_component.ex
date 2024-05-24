@@ -20,11 +20,23 @@ defmodule CrudPhoenixWeb.CompanyLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:name]} type="text" label="Name" />
-        <.input field={@form[:logo]} type="text" label="Logo" />
         <.input field={@form[:business]} type="text" label="Business" />
         <.input field={@form[:description]} type="text" label="Description" />
         <.input field={@form[:creation]} type="date" label="Creation" />
         <.input field={@form[:headquarters]} type="text" label="Headquarters" />
+
+        <.live_file_input upload={@uploads.logo} />
+        <%= for entry <- @uploads.logo.entries do %>
+          <figure>
+            <.live_img_preview entry={entry} />
+            <figcaption><%= entry.client_name %></figcaption>
+          </figure>
+          <progress value={entry.progress} max="100"><%= entry.progress %>%</progress>
+          <%= for err <- upload_errors(@uploads.logo, entry) do %>
+            <p role="alert" class="alert alert-danger"><%= err %></p>
+          <% end %>
+        <% end %>
+
         <:actions>
           <.button phx-disable-with="Saving...">Save Company</.button>
         </:actions>
@@ -40,7 +52,9 @@ defmodule CrudPhoenixWeb.CompanyLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign_form(changeset)}
+     |> assign_form(changeset)
+     |> assign(:uploaded_files, [])
+     |> allow_upload(:logo, accept: ~w(.jpg .png .jpeg), max_entries: 1)}
   end
 
   @impl true
@@ -58,6 +72,7 @@ defmodule CrudPhoenixWeb.CompanyLive.FormComponent do
   end
 
   defp save_company(socket, :edit, company_params) do
+    {:ok, company_params} = save_file(socket, company_params)
     case Companies.update_company(socket.assigns.company, company_params) do
       {:ok, company} ->
         notify_parent({:saved, company})
@@ -73,6 +88,7 @@ defmodule CrudPhoenixWeb.CompanyLive.FormComponent do
   end
 
   defp save_company(socket, :new, company_params) do
+    {:ok, company_params} = save_file(socket, company_params)
     case Companies.create_company(company_params) do
       {:ok, company} ->
         notify_parent({:saved, company})
@@ -85,6 +101,25 @@ defmodule CrudPhoenixWeb.CompanyLive.FormComponent do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}
     end
+  end
+
+  defp save_file(socket, company_params) do
+    image_files =
+      consume_uploaded_entries(socket, :logo, fn %{path: path}, _entry ->
+        dest = Path.join([:code.priv_dir(:crud_phoenix), "static", "uploads", Path.basename(path)])
+
+        File.cp!(path, dest)
+        {:ok, ~p"/uploads/#{Path.basename(dest)}"}
+      end)
+
+      company_params = if length(image_files) > 0 do
+      [file | _] = image_files
+      Map.put(company_params, "logo", file)
+    else
+      Map.put(company_params, "logo", nil)
+    end
+
+    {:ok, company_params}
   end
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do

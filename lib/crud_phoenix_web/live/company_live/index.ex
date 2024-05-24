@@ -40,8 +40,16 @@ defmodule CrudPhoenixWeb.CompanyLive.Index do
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
     company = Companies.get_company!(id)
+    delete_file!(company.logo)
     {:ok, _} = Companies.delete_company(company)
 
     {:noreply, stream_delete(socket, :companies, company)}
+  end
+
+  defp delete_file!(company_logo) do
+    if !is_nil(company_logo) do
+      path = Path.join([:code.priv_dir(:crud_phoenix), "static", company_logo])
+      File.rm!(path)
+    end
   end
 end

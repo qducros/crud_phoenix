@@ -14,6 +14,12 @@ defmodule CrudPhoenixWeb.CompanyLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
+  defp apply_action(socket, :delete, %{"id" => id}) do
+    socket
+    |> assign(:page_title, "Delete Company")
+    |> assign(:company, Companies.get_company!(id))
+  end
+
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Company")
@@ -38,18 +44,7 @@ defmodule CrudPhoenixWeb.CompanyLive.Index do
   end
 
   @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
-    company = Companies.get_company!(id)
-    delete_file!(company.logo)
-    {:ok, _} = Companies.delete_company(company)
-
+  def handle_info({CrudPhoenixWeb.CompanyLive.FormDeleteComponent, {:deleted, company}}, socket) do
     {:noreply, stream_delete(socket, :companies, company)}
-  end
-
-  defp delete_file!(company_logo) do
-    if !is_nil(company_logo) do
-      path = Path.join([:code.priv_dir(:crud_phoenix), "static", company_logo])
-      File.rm!(path)
-    end
   end
 end

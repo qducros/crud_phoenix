@@ -20,14 +20,19 @@ defmodule CrudPhoenixWeb.Router do
     live "/companies", CompanyLive.Index, :index
     live "/companies/new", CompanyLive.Index, :new
     live "/companies/:id/edit", CompanyLive.Index, :edit
+    live "/companies/:id/delete", CompanyLive.Index, :delete
     live "/companies/:id", CompanyLive.Show, :show
     live "/companies/:id/show/edit", CompanyLive.Show, :edit
+    live "/companies/:id/show/delete", CompanyLive.Show, :delete
 
     live "/employees", EmployeeLive.Index, :index
     live "/employees/new", EmployeeLive.Index, :new
     live "/employees/:id/edit", EmployeeLive.Index, :edit
+    live "/employees/:id/delete", EmployeeLive.Index, :delete
     live "/employees/:id", EmployeeLive.Show, :show
     live "/employees/:id/show/edit", EmployeeLive.Show, :edit
+    live "/employees/:id/show/delete", EmployeeLive.Show, :delete
+
     get "/", PageController, :home
   end
 

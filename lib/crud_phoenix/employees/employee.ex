@@ -2,6 +2,27 @@ defmodule CrudPhoenix.Employees.Employee do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {
+    Flop.Schema,
+    filterable: [:fullname, :email, :title, :company_name],
+    sortable: [:fullname, :age],
+    max_limit: 100,
+    default_limit: 10,
+    default_order: %{
+      order_by: [:fullname],
+      order_directions: [:asc]
+    },
+    adapter_opts: [
+      join_fields: [
+        company_name: [
+          binding: :company,
+          field: :name,
+          ecto_type: :string
+        ]
+      ]
+    ]
+  }
+
   schema "employees" do
     field :title, :string
     field :fullname, :string

@@ -2,30 +2,93 @@
   Listing Companies
   <:actions>
     <.link patch={~p"/companies/new"}>
-      <.button>New Company</.button>
+      <.button class="text-green-800 rounded-lg bg-green-50 hover:bg-green-100 focus:ring-green-300">
+      New Company</.button>
     </.link>
   </:actions>
 </.header>
 
-<.table
+<.filter_form
+  fields={[
+    name: [label: gettext("Name"), op: :ilike_and],
+    business: [label: gettext("Business"), op: :ilike_and],
+    headquarters: [label: gettext("Headquarters"), op: :ilike_and]
+  ]}
+  meta={@meta}
+  id="company-filter-form"
+/>
+
+<Flop.Phoenix.table
   id="companies"
-  rows={@streams.companies}
+  items={@streams.companies}
+  meta={@meta}
+  path={~p"/companies"}
   row_click={fn {_id, company} -> JS.navigate(~p"/companies/#{company}") end}
 >
-  <:col :let={{_id, company}} label="Logo"><img src={company.logo} class="max-w-24 h-auto block" alt="company logo" /></:col>
-  <:col :let={{_id, company}} label="Name"><%= company.name %></:col>
-  <:col :let={{_id, company}} label="Business"><%= company.business %></:col>
-  <:col :let={{_id, company}} label="Description"><%= company.description %></:col>
-  <:col :let={{_id, company}} label="Creation"><%= company.creation %></:col>
-  <:col :let={{_id, company}} label="Headquarters"><%= company.headquarters %></:col>
+  <:col :let={{_id, company}} label="Logo">
+    <div class="block py-4 pr-6">
+      <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+      <span class={["relative"]}>
+        <img src={company.logo} class="max-w-24 h-auto block" alt="company logo" />
+      </span>
+    </div>
+  </:col>
+  <:col :let={{_id, company}} label="Name" field={:name}>
+    <div class="block py-4 pr-6">
+      <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+      <span class={["relative"]}>
+        <%= company.name %>
+      </span>
+    </div>
+  </:col>
+  <:col :let={{_id, company}} label="Business">
+    <div class="block py-4 pr-6">
+      <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+      <span class={["relative"]}>
+        <%= company.business %>
+      </span>
+    </div>
+  </:col>
+  <:col :let={{_id, company}} label="Description">
+    <div class="block py-4 pr-6">
+      <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+      <span class={["relative"]}>
+        <%= company.description %>
+      </span>
+    </div>
+  </:col>
+  <:col :let={{_id, company}} label="Creation" field={:creation}>
+    <div class="block py-4 pr-6">
+      <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+      <span class={["relative"]}>
+        <%= company.creation %>
+      </span>
+    </div>
+  </:col>
+  <:col :let={{_id, company}} label="Headquarters">
+    <div class="block py-4 pr-6">
+      <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+      <span class={["relative"]}>
+        <%= company.headquarters %>
+      </span>
+    </div>
+  </:col>
   <:action :let={{_id, company}}>
     <div class="sr-only">
       <.link navigate={~p"/companies/#{company}"}>Show</.link>
     </div>
-    <.link patch={~p"/companies/#{company}/edit"} class="mr-2">Edit</.link>
-    <.link patch={~p"/companies/#{company}/delete"}>Delete</.link>
+    <.link patch={~p"/companies/#{company}/edit"} class="mr-2">
+      <.button class="text-blue-800 bg-blue-50 hover:bg-blue-100 focus:ring-blue-300">
+      Edit</.button>
+    </.link>
+    <.link patch={~p"/companies/#{company}/delete"}>
+      <.button class="text-red-800 bg-red-50 hover:bg-red-100 focus:ring-red-300">
+      Delete</.button>
+    </.link>
   </:action>
-</.table>
+</Flop.Phoenix.table>
+
+<Flop.Phoenix.pagination meta={@meta} path={~p"/companies"} />
 
 <.modal :if={@live_action in [:new, :edit]} id="company-modal" show on_cancel={JS.patch(~p"/companies")}>
   <.live_component

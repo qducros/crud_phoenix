@@ -19,6 +19,67 @@ defmodule CrudPhoenixWeb.CoreComponents do
   alias Phoenix.LiveView.JS
   import CrudPhoenixWeb.Gettext
 
+  def pagination_opts do
+    [
+      ellipsis_attrs: [class: "ellipsis"],
+      ellipsis_content: "‥",
+      current_link_attrs: [class: "relative z-10 inline-flex items-center bg-zinc-400 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400", aria: [current: "page"]],
+      wrapper_attrs: [class: "flex justify-center px-4 py-3 sm:px-6", aria: [label: "Pagination"]],
+      pagination_list_attrs: [class: "inline-flex -space-x-px text-sm"],
+      pagination_link_attrs: [class: "relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"],
+      next_link_attrs: [class: "order-last relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"],
+      next_link_content: next_icon(),
+      page_links: {:ellipsis, 7},
+      previous_link_attrs: [class: "relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"],
+      previous_link_content: previous_icon()
+    ]
+  end
+
+  defp next_icon do
+    assigns = %{}
+
+    ~H"""
+    <span class="sr-only">Next</span>
+    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+    </svg>
+    """
+  end
+
+  defp previous_icon do
+    assigns = %{}
+
+    ~H"""
+    <span class="sr-only">Previous</span>
+    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+    </svg>
+    """
+  end
+
+  def table_opts do
+    [
+      container: true,
+      container_attrs: [class: "overflow-y-auto px-4 sm:overflow-visible sm:px-0"],
+      no_results_content: no_results_content(),
+      table_attrs: [class: "w-[40rem] mt-11 sm:w-full"],
+      thead_attrs: [class: "text-sm text-left leading-6 text-zinc-500"],
+      thead_th_attrs: [class: "p-0 pb-4 pr-6 font-normal"],
+      tbody_attrs: [class: "relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"],
+      tbody_td_attrs: [class: "relative p-0 hover:cursor-pointer"],
+      tbody_tr_attrs: [class: "group hover:bg-zinc-50"],
+      symbol_unsorted: "-"
+    ]
+  end
+
+  defp no_results_content do
+    assigns = %{}
+
+    ~H"""
+    <p>Nothing found.</p>
+    """
+  end
+
   @doc """
   Renders a modal.
 
@@ -231,8 +292,8 @@ defmodule CrudPhoenixWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "phx-submit-loading:opacity-75 rounded-lg py-2 px-3",
+        "text-sm font-semibold leading-6 focus:outline-none focus:ring-4",
         @class
       ]}
       {@rest}

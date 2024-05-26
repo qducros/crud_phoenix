@@ -21,6 +21,13 @@ defmodule CrudPhoenix.Employees do
     Employee |> Repo.all() |> Repo.preload(:company)
   end
 
+  def list_employees_with_params(params) do
+    Employee
+    |> join(:left, [o], p in assoc(o, :company), as: :company)
+    |> preload([company: p], [company: p])
+    |> Flop.validate_and_run!(params, for: Employee)
+  end
+
   @doc """
   Gets a single employee.
 

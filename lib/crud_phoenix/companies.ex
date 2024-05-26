@@ -21,6 +21,10 @@ defmodule CrudPhoenix.Companies do
     Repo.all(Company)
   end
 
+  def list_companies_with_params(params) do
+    Flop.validate_and_run(Company, params, for: Company)
+  end
+
   def list_company_names_ids do
     Company
     |> Repo.all()

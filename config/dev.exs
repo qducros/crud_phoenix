@@ -65,6 +65,9 @@ config :crud_phoenix, CrudPhoenixWeb.Endpoint,
 # Enable dev routes for dashboard and mailbox
 config :crud_phoenix, dev_routes: true
 
+# Config for pagination/sorting/filtering library
+config :flop, repo: CrudPhoenix.Repo
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 

@@ -7,25 +7,80 @@
   </:actions>
 </.header>
 
-<.table
+<.filter_form
+  fields={[
+    fullname: [label: gettext("Full name"), op: :ilike_and],
+    email: [label: gettext("Email"), op: :ilike_and],
+    title: [label: gettext("Title"), op: :ilike_and],
+    company_name: [label: gettext("Company"), op: :ilike_and]
+  ]}
+  meta={@meta}
+  id="employee-filter-form"
+/>
+
+<Flop.Phoenix.table
   id="employees"
-  rows={@streams.employees}
+  items={@streams.employees}
+  meta={@meta}
+  path={~p"/employees"}
   row_click={fn {_id, employee} -> JS.navigate(~p"/employees/#{employee}") end}
 >
-  <:col :let={{_id, employee}} label="Full Name"><%= employee.fullname %></:col>
-  <:col :let={{_id, employee}} label="Email"><%= employee.email %></:col>
-  <:col :let={{_id, employee}} label="Title"><%= employee.title %></:col>
-  <:col :let={{_id, employee}} label="Age"><%= employee.age %></:col>
-  <:col :let={{_id, employee}} label="Company"><%= employee.company.name %></:col>
+  <:col :let={{_id, employee}} label="Full Name" field={:fullname}>
+    <div class="block py-4 pr-6">
+        <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+        <span class={["relative"]}>
+          <%= employee.fullname %>
+        </span>
+      </div>
+  </:col>
+  <:col :let={{_id, employee}} label="Email">
+    <div class="block py-4 pr-6">
+      <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+      <span class={["relative"]}>
+        <%= employee.email %>
+      </span>
+    </div>
+  </:col>
+  <:col :let={{_id, employee}} label="Title">
+    <div class="block py-4 pr-6">
+      <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+      <span class={["relative"]}>
+        <%= employee.title %>
+      </span>
+    </div>
+  </:col>
+  <:col :let={{_id, employee}} label="Age" field={:age}>
+    <div class="block py-4 pr-6">
+      <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+      <span class={["relative"]}>
+        <%= employee.age %>
+      </span>
+    </div>
+  </:col>
+  <:col :let={{_id, employee}} label="Company">
+    <div class="block py-4 pr-6">
+      <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+      <span class={["relative"]}>
+        <%= employee.company.name %>
+      </span>
+    </div>
+  </:col>
   <:action :let={{_id, employee}}>
     <div class="sr-only">
       <.link navigate={~p"/employees/#{employee}"}>Show</.link>
     </div>
-    <.link patch={~p"/employees/#{employee}/edit"} class="mr-2">Edit</.link>
-        <.link patch={~p"/employees/#{employee}/delete"}>Delete</.link>
-
+    <.link patch={~p"/employees/#{employee}/edit"} class="mr-2">
+      <.button class="text-blue-800 bg-blue-50 hover:bg-blue-100 focus:ring-blue-300">
+      Edit</.button>
+    </.link>
+    <.link patch={~p"/employees/#{employee}/delete"}>
+      <.button class="text-red-800 bg-red-50 hover:bg-red-100 focus:ring-red-300">
+      Delete</.button>
+    </.link>
   </:action>
-</.table>
+</Flop.Phoenix.table>
+
+<Flop.Phoenix.pagination meta={@meta} path={~p"/employees"} />
 
 <.modal :if={@live_action in [:new, :edit]} id="employee-modal" show on_cancel={JS.patch(~p"/employees")}>
   <.live_component

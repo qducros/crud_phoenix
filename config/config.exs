@@ -64,3 +64,8 @@ config :phoenix, :json_library, Jason
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
+
+# Config for flop components' customization
+config :flop_phoenix,
+  pagination: [opts: {CrudPhoenixWeb.CoreComponents, :pagination_opts}],
+  table: [opts: {CrudPhoenixWeb.CoreComponents, :table_opts}]

@@ -10,10 +10,13 @@ defmodule CrudPhoenixWeb.CompanyLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
+    {company, employee_count, last_five_employees} = Companies.get_company_with_employees!(id)
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:company, Companies.get_company_with_employees!(id))}
+     |> assign(:company, company)
+     |> assign(:employee_count, employee_count)
+     |> assign(:last_five_employees, last_five_employees)}
   end
 
   defp page_title(:show), do: "Show Company"

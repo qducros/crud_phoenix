@@ -17,10 +17,11 @@
   <:item title="Description"><%= @company.description %></:item>
   <:item title="Creation"><%= @company.creation %></:item>
   <:item title="Headquarters"><%= @company.headquarters %></:item>
+  <:item title="Workforce"><%= @employee_count %></:item>
 </.list>
 
 <.header class="mt-20">
-  Employees from <%= @company.name %>
+  Latest employees from <%= @company.name %>
   <.link navigate={~p"/employees?filters[3][field]=company_name&filters[3][op]=ilike_and&filters[3][value]=Gogole"}>
       <.button class="ml-2 rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80">Full list</.button>
   </.link>
@@ -28,7 +29,7 @@
 
 <.table
   id="employees"
-  rows={@company.employees}
+  rows={@last_five_employees}
   row_click={fn employee -> JS.navigate(~p"/employees/#{employee}") end}
 >
   <:col :let={employee} label="Full Name"><%= employee.fullname %></:col>

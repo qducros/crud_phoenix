@@ -7,6 +7,7 @@ defmodule CrudPhoenix.Companies do
   alias CrudPhoenix.Repo
 
   alias CrudPhoenix.Companies.Company
+  alias CrudPhoenix.Employees.Employee
 
   @doc """
   Returns the list of companies.
@@ -54,7 +55,22 @@ defmodule CrudPhoenix.Companies do
   def get_company!(id), do: Repo.get!(Company, id)
 
   def get_company_with_employees!(id) do
-    Company |> Repo.get!(id) |> Repo.preload(:employees)
+    company = Company
+    |> Repo.get!(id)
+    |> Repo.preload(:employees)
+
+    employee_count = company
+    |> Map.get(:employees)
+    |> Enum.count()
+
+    last_five_employees = from(e in Employee,
+      where: e.company_id == ^company.id,
+      order_by: [desc: e.inserted_at],
+      limit: 5
+    )
+    |> Repo.all()
+
+  {company, employee_count, last_five_employees}
   end
 
   @doc """

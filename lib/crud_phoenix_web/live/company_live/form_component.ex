@@ -33,7 +33,7 @@ defmodule CrudPhoenixWeb.CompanyLive.FormComponent do
           </figure>
           <progress value={entry.progress} max="100"><%= entry.progress %>%</progress>
           <%= for err <- upload_errors(@uploads.logo, entry) do %>
-            <p role="alert" class="alert alert-danger"><%= err %></p>
+            <p role="alert" class="mt-3 flex gap-3 text-sm leading-6 text-rose-600 phx-no-feedback:hidden"><%= error_to_string(err) %></p>
           <% end %>
         <% end %>
 
@@ -127,4 +127,8 @@ defmodule CrudPhoenixWeb.CompanyLive.FormComponent do
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
+
+  defp error_to_string(:too_large), do: "Too large"
+  defp error_to_string(:too_many_files), do: "You have selected too many files"
+  defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
 end

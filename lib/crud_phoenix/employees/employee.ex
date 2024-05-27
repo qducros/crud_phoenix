@@ -39,6 +39,7 @@ defmodule CrudPhoenix.Employees.Employee do
     |> cast(attrs, [:fullname, :email, :title, :age, :company_id])
     |> validate_required([:fullname, :email, :title, :age, :company_id])
     |> validate_inclusion(:company_id, CrudPhoenix.Companies.list_company_ids())
+    |> validate_format(:email, ~r/@/)
     |> validate_inclusion(:age, 16..100)
     |> unique_constraint(:email)
   end

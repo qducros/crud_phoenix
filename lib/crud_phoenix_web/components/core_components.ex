@@ -68,7 +68,7 @@ defmodule CrudPhoenixWeb.CoreComponents do
       tbody_attrs: [class: "relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"],
       tbody_td_attrs: [class: "relative p-0 hover:cursor-pointer"],
       tbody_tr_attrs: [class: "group hover:bg-zinc-50"],
-      symbol_unsorted: "-"
+      symbol_unsorted: "▵"
     ]
   end
 

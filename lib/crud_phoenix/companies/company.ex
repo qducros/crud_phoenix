@@ -5,13 +5,16 @@ defmodule CrudPhoenix.Companies.Company do
   @derive {
     Flop.Schema,
     filterable: [:name, :business, :headquarters],
-    sortable: [:name, :creation],
+    sortable: [:name, :creation, :employee_count],
     max_limit: 100,
     default_limit: 10,
     default_order: %{
       order_by: [:name],
       order_directions: [:asc]
-    }
+    },
+    adapter_opts: [
+      alias_fields: [:employee_count]
+    ]
   }
 
   schema "companies" do
@@ -21,6 +24,7 @@ defmodule CrudPhoenix.Companies.Company do
     field :logo, :string
     field :business, :string
     field :headquarters, :string
+    field :employee_count, :integer, virtual: true
     has_many(:employees, CrudPhoenix.Employees.Employee)
 
     timestamps(type: :utc_datetime)

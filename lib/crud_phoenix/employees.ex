@@ -23,8 +23,8 @@ defmodule CrudPhoenix.Employees do
 
   def list_employees_with_params(params) do
     Employee
-    |> join(:left, [o], p in assoc(o, :company), as: :company)
-    |> preload([company: p], [company: p])
+    |> join(:left, [e], c in assoc(e, :company), as: :company)
+    |> preload([company: c], [company: c])
     |> Flop.validate_and_run!(params, for: Employee)
   end
 

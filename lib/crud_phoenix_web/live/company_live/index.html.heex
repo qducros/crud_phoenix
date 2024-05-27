@@ -73,6 +73,14 @@
       </span>
     </div>
   </:col>
+  <:col :let={{_id, company}} label="Workforce" field={:employee_count}>
+    <div class="block py-4 pr-6">
+      <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+      <span class={["relative"]}>
+        <%= company.employee_count %>
+      </span>
+    </div>
+  </:col>
   <:action :let={{_id, company}}>
     <div class="sr-only">
       <.link navigate={~p"/companies/#{company}"}>Show</.link>

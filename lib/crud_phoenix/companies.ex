@@ -23,7 +23,12 @@ defmodule CrudPhoenix.Companies do
   end
 
   def list_companies_with_params(params) do
-    Flop.validate_and_run(Company, params, for: Company)
+    query = from c in Company,
+        left_join: e in Employee, on: c.id == e.company_id,
+        group_by: c.id,
+        select: %{c | employee_count: count(e.id) |> selected_as(:employee_count)}
+
+    Flop.validate_and_run(query, params, for: Company)
   end
 
   def list_company_names_ids do
@@ -70,7 +75,7 @@ defmodule CrudPhoenix.Companies do
     )
     |> Repo.all()
 
-  {company, employee_count, last_five_employees}
+    {company, employee_count, last_five_employees}
   end
 
   @doc """
